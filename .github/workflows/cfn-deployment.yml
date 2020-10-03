@@ -1,0 +1,28 @@
+name: CFN-Deploy
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  super-lint:
+    # Name the Job
+    name: Lint code base
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run CFN-Action
+        uses: intuit/cfn-deploy@master
+        env:
+          AWS_REGION: us-west-2
+          STACK_NAME: cfn-deploy
+          TEMPLATE_FILE: ec2.yml
+          CAPABLITIES: CAPABILITY_IAM
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
